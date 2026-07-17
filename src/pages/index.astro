@@ -1,0 +1,143 @@
+---
+import '../styles/base.css';
+import '../styles/theme-geocities.css';
+import '../styles/theme-aero.css';
+import '../styles/theme-xp.css';
+
+const THEMES = [
+  { id: 'geocities', label: 'GeoCities' },
+  { id: 'aero', label: 'Frutiger Aero' },
+  { id: 'xp', label: 'Windows XP' },
+] as const;
+
+const DEFAULT_THEME = 'geocities';
+---
+
+<!doctype html>
+<html lang="en" data-theme={DEFAULT_THEME}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hello World — Retro Time Machine</title>
+    <meta name="description" content="A hello world app across three eras of the early web." />
+    {/* Apply the saved theme before first paint to avoid a flash of the default. */}
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('retro-theme');
+          if (saved) document.documentElement.setAttribute('data-theme', saved);
+        } catch (e) {
+          /* localStorage unavailable — fall back to the default theme */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <nav class="switcher" aria-label="Theme switcher">
+      <span class="switcher__label">Era</span>
+      {
+        THEMES.map((theme) => (
+          <button
+            class="switcher__btn"
+            type="button"
+            data-theme-btn={theme.id}
+            aria-pressed={theme.id === DEFAULT_THEME ? 'true' : 'false'}
+          >
+            {theme.label}
+          </button>
+        ))
+      }
+    </nav>
+
+    {/* --- GeoCities / Web 1.0 --- */}
+    <main class="stage stage--geocities">
+      <div class="gc-card">
+        <div class="gc-marquee">
+          <span>★ ☆ ★ WELCOME TO MY HOMEPAGE ★ ☆ ★ SIGN MY GUESTBOOK! ★ ☆ ★</span>
+        </div>
+        <h1 class="gc-title">Hello World!!!</h1>
+        <p class="gc-sub">~*~ thanx 4 visiting my kewl site ~*~</p>
+        <div class="gc-counter">You are visitor #<b>0000042</b></div>
+        <div class="gc-construction"><span>🚧 UNDER CONSTRUCTION 🚧</span></div>
+        <p class="gc-links">
+          <a href="#">[ Home ]</a> · <a href="#">[ Guestbook ]</a> · <a href="#">[ Webring ]</a>
+        </p>
+      </div>
+    </main>
+
+    {/* --- Frutiger Aero / Web 2.0 --- */}
+    <main class="stage stage--aero">
+      <div class="aero-card">
+        <div class="aero-orb" aria-hidden="true"></div>
+        <h1 class="aero-title">Hello World</h1>
+        <p class="aero-sub">Glossy, glassy, and full of Web 2.0 optimism.</p>
+        <button class="aero-btn" type="button">Get Started ▸</button>
+      </div>
+    </main>
+
+    {/* --- Windows XP / Luna --- */}
+    <main class="stage stage--xp">
+      <div class="xp-window" role="dialog" aria-label="Hello World">
+        <div class="xp-titlebar">
+          <span class="xp-titlebar__icon" aria-hidden="true">💬</span>
+          <span class="xp-titlebar__title">Hello World</span>
+          <span class="xp-titlebar__buttons" aria-hidden="true">
+            <span class="xp-tb-btn">_</span>
+            <span class="xp-tb-btn">□</span>
+            <span class="xp-tb-btn xp-tb-btn--close">✕</span>
+          </span>
+        </div>
+        <div class="xp-menubar" aria-hidden="true">
+          <span><u>F</u>ile</span>
+          <span><u>E</u>dit</span>
+          <span><u>V</u>iew</span>
+          <span><u>H</u>elp</span>
+        </div>
+        <div class="xp-body">
+          <h1 class="xp-title">Hello World</h1>
+          <p class="xp-sub">Welcome to Windows XP. It's now safe to say hello.</p>
+          <div class="xp-buttons">
+            <button class="xp-btn" type="button">OK</button>
+            <button class="xp-btn" type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    {/* XP taskbar — only visible under the XP theme (see theme-xp.css) */}
+    <div class="xp-taskbar" aria-hidden="true">
+      <div class="xp-start">⊞ start</div>
+      <div class="xp-clock">2:00 PM</div>
+    </div>
+
+    <script>
+      const STORAGE_KEY = 'retro-theme';
+      const root = document.documentElement;
+      const buttons = Array.from(
+        document.querySelectorAll<HTMLButtonElement>('[data-theme-btn]')
+      );
+
+      function applyTheme(theme: string) {
+        root.setAttribute('data-theme', theme);
+        for (const btn of buttons) {
+          btn.setAttribute(
+            'aria-pressed',
+            btn.dataset.themeBtn === theme ? 'true' : 'false'
+          );
+        }
+        try {
+          localStorage.setItem(STORAGE_KEY, theme);
+        } catch (e) {
+          /* ignore persistence failures */
+        }
+      }
+
+      for (const btn of buttons) {
+        btn.addEventListener('click', () => applyTheme(btn.dataset.themeBtn!));
+      }
+
+      // Sync the pressed state with whatever the pre-paint script already set.
+      applyTheme(root.getAttribute('data-theme') ?? 'geocities');
+    </script>
+  </body>
+</html>

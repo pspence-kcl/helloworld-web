@@ -1,0 +1,167 @@
+/* Windows XP / Luna — the blue theme.
+   Bliss-green wallpaper, blue title bars, Tahoma, gradient Start bar. */
+
+html[data-theme='xp'] body {
+  /* Bliss-ish: green hills under a blue sky */
+  background: linear-gradient(to bottom, #4b91d6 0%, #7db4e6 45%, #86c04a 60%, #4f8a2e 100%);
+  color: #000;
+  font-family: Tahoma, 'Segoe UI', Verdana, sans-serif;
+  /* leave room for the taskbar */
+  padding-bottom: 34px;
+}
+
+.xp-window {
+  width: min(460px, 100%);
+  background: #ece9d8;
+  border: 1px solid #0831d9;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.xp-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(to bottom, #0058ee 0%, #3f8cf3 8%, #0058ee 45%, #0046d5 100%);
+}
+
+.xp-titlebar__icon {
+  font-size: 0.95rem;
+}
+
+.xp-titlebar__title {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.xp-titlebar__buttons {
+  display: flex;
+  gap: 3px;
+}
+
+.xp-tb-btn {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  border: 1px solid #ffffff88;
+  border-radius: 3px;
+  background: linear-gradient(to bottom, #3f8cf3, #0046d5);
+}
+
+.xp-tb-btn--close {
+  background: linear-gradient(to bottom, #f18f6f, #d84d21);
+}
+
+.xp-menubar {
+  display: flex;
+  gap: 0.9rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #aca899;
+  background: #ece9d8;
+}
+
+.xp-menubar span u {
+  text-decoration: underline;
+}
+
+.xp-body {
+  padding: 1.75rem 1.5rem 2rem;
+  text-align: center;
+  background: #fff;
+}
+
+.xp-title {
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  margin: 0.5rem 0;
+  color: #0a246a;
+}
+
+.xp-sub {
+  margin: 0.5rem 0 1.5rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.xp-buttons {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.xp-btn {
+  cursor: pointer;
+  min-width: 76px;
+  padding: 0.35rem 0.9rem;
+  font: inherit;
+  font-size: 0.85rem;
+  background: linear-gradient(to bottom, #fefefe, #e3e3d4);
+  border: 1px solid #707070;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px #fff;
+}
+
+.xp-btn:hover {
+  border-color: #e8a200;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 4px #ffca44;
+}
+
+.xp-btn:active {
+  background: linear-gradient(to bottom, #e3e3d4, #fefefe);
+}
+
+/* Taskbar pinned to the bottom of the viewport */
+.xp-taskbar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34px;
+  align-items: center;
+  padding-right: 0.5rem;
+  background: linear-gradient(to bottom, #3168d5 0%, #4993e6 9%, #2b5bc4 18%, #2f6ad6 92%, #1c48b8 100%);
+  border-top: 1px solid #1c3ec9;
+  z-index: 900;
+}
+
+html[data-theme='xp'] .xp-taskbar {
+  display: flex;
+}
+
+.xp-start {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 100%;
+  padding: 0 1.6rem 0 0.7rem;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(to bottom, #5cb531 0%, #3d9c1e 55%, #2f8016 100%);
+  box-shadow: inset 0 1px 0 #9be86a;
+}
+
+.xp-clock {
+  margin-left: auto;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 0 0.5rem;
+  background: linear-gradient(to bottom, #199be3, #1176c9);
+  border-left: 1px solid #1c48b8;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
