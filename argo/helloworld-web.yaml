@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloworld-web
+  labels:
+    app: helloworld-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: helloworld-web
+  template:
+    metadata:
+      labels:
+        app: helloworld-web
+    spec:
+      containers:
+      - name: helloworld-web
+        image: helloworld-web:dev     # locally-built image (see Dockerfile)
+        imagePullPolicy: Never         # use the local image; don't pull from a registry
+        ports:
+        - containerPort: 80            # nginx:alpine listens on 80
+        readinessProbe:                # keeps a pod out of the Service until it serves
+          httpGet:
+            path: /                    # static site: the homepage is the health check
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 10
+        livenessProbe:                 # restarts a pod if nginx stops responding
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld-web
+  labels:
+    app: helloworld-web
+spec:
+  type: ClusterIP         # in-cluster only; reach it by name http://helloworld-web
+  selector:
+    app: helloworld-web   # must match the pod labels above
+  ports:
+  - port: 80              # in-cluster address: http://helloworld-web:80
+    targetPort: 80        # the container's real port (nginx)
+    protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: helloworld-web
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  # Given a host so it doesn't collide with moonshine's hostless "/" rule.
+  # hello.localhost resolves to 127.0.0.1 — browse to http://hello.localhost
+  - host: hello.localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: helloworld-web   # the ClusterIP Service above
+            port:
+              number: 80           # Service port (targets 80 in the pods)
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: helloworld-web
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:                        # no host: matches any hostname, incl. plain 127.0.0.1
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: helloworld-web      # the ClusterIP Service above
+            port:
+              number: 80         # Service port (targets 8081 in the pods)\
