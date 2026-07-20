@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: helloworld-web
-        image: helloworld-web:dev     # locally-built image (see Dockerfile)
-        imagePullPolicy: Never         # use the local image; don't pull from a registry
+        image: impatspence/helloworld_web:latest   # tag overridden by kustomization.yaml
+        imagePullPolicy: IfNotPresent               # immutable build-number tags => no need for Always
         ports:
         - containerPort: 80            # nginx:alpine listens on 80
         readinessProbe:                # keeps a pod out of the Service until it serves
