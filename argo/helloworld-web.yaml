@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: helloworld-web
-        image: impatspence/helloworld_web:%dep.<HelloWorld_Build>.build.number%
+        image: impatspence/helloworld_web:19
         imagePullPolicy: IfNotPresent               # immutable build-number tags => no need for Always
         ports:
         - containerPort: 80            # nginx:alpine listens on 80
